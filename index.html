@@ -1,105 +1,4 @@
-<!DOCTYPE html>
-<html lang="tr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>For You</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        body {
-            background-color: black;
-            overflow: hidden;
-            font-family: 'Courier New', Courier, monospace;
-        }
-        canvas {
-            display: block;
-            position: absolute;
-            top: 0;
-            left: 0;
-            z-index: 1;
-        }
-        #ui-container {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 2;
-            pointer-events: none;
-        }
-        .text-line {
-            font-size: 2.5rem;
-            font-weight: bold;
-            color: #ffffff;
-            text-shadow: 0 0 10px #ffffff, 0 0 20px #ffffff;
-            opacity: 0;
-            transform: scale(0.8);
-            transition: all 0.8s ease;
-            margin: 10px 0;
-            text-align: center;
-            background: rgba(0, 0, 0, 0.6);
-            padding: 10px 20px;
-            border-radius: 8px;
-        }
-        .text-line.show {
-            opacity: 1;
-            transform: scale(1);
-        }
-        #heart-container {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 3;
-            pointer-events: none;
-        }
-        .heart {
-            position: absolute;
-            font-size: 2rem;
-            animation: floatUp 4s linear forwards;
-            opacity: 0;
-        }
-        @keyframes floatUp {
-            0% {
-                transform: translateY(105vh) scale(0.5) rotate(0deg);
-                opacity: 0;
-            }
-            10% {
-                opacity: 0.8;
-            }
-            90% {
-                opacity: 0.8;
-            }
-            100% {
-                transform: translateY(-10vh) scale(1.2) rotate(360deg);
-                opacity: 0;
-            }
-        }
-    </style>
-</head>
-<body>
-
-    <canvas id="matrix"></canvas>
-    
-    <div id="ui-container">
-        <div class="text-line" id="line1">SENİ ÇOK SEVİYORUM</div>
-        <div class="text-line" id="line2">SEVGİLİM</div>
-        <div class="text-line" id="line3">EŞŞŞEK HERİFİM</div>
-
-    </div>
-
-    <div id="heart-container"></div>
-
-    <script>
+<script>
         // Matrix Yağmuru
         const canvas = document.getElementById('matrix');
         const ctx = canvas.getContext('2d');
@@ -122,7 +21,6 @@
             ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            // Klasik yeşil tonları yerine siyah-beyaz temaya uyması için gri tonlarında Matrix yağmuru
             ctx.fillStyle = '#666'; 
             ctx.font = fontSize + 'px monospace';
 
@@ -147,6 +45,7 @@
         // Yazıların ve Siyah-Beyaz Kalplerin Akışı
         const line1 = document.getElementById('line1');
         const line2 = document.getElementById('line2');
+        const line3 = document.getElementById('line3'); // Yeni eklediğin satırı buraya tanımladık
         const heartContainer = document.getElementById('heart-container');
 
         // Zamanlama Ayarları (Milisaniye cinsinden)
@@ -159,36 +58,34 @@
         }, 3000); // 3 saniye sonra ikinci yazı
 
         setTimeout(() => {
-            // Yazılar geldikten sonra kalpler sürekli olarak üretilmeye başlar
+            line3.classList.add('show');
+        }, 4500); // 4.5 saniye sonra üçüncü yazı (EŞŞŞEK HERİFİM) ekrana gelecek
+
+        setTimeout(() => {
+            // Tüm yazılar geldikten sonra kalpler sürekli olarak üretilmeye başlar
             setInterval(createHeart, 150);
-        }, 4000);
+        }, 5500); // Kalplerin başlama süresini 3. yazıdan sonraya çektik
 
         function createHeart() {
             const heart = document.createElement('div');
             heart.classList.add('heart');
-            heart.innerText = '🖤'; // Siyah kalp
+            heart.innerText = '🖤'; 
             
-            // Rastgele siyah veya beyaz kalp seçimi
             if (Math.random() > 0.5) {
-                heart.innerText = '🤍'; // Beyaz kalp
+                heart.innerText = '🤍'; 
             }
 
             heart.style.left = Math.random() * 100 + 'vw';
-            // Kalplerin boyutlarını çeşitlendirelim
             const size = Math.random() * 2 + 1.5; 
             heart.style.fontSize = size + 'rem';
             
-            // Hızları hafifçe rastgele yapalım
             const duration = Math.random() * 2 + 3;
             heart.style.animationDuration = duration + 's';
 
             heartContainer.appendChild(heart);
 
-            // Ekrandan çıkan kalpleri temizleyelim
             setTimeout(() => {
                 heart.remove();
             }, duration * 1000);
         }
     </script>
-</body>
-</html>
